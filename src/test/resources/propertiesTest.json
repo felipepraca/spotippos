@@ -1,0 +1,93 @@
+{
+  "totalProperties": 8000,
+  "properties": [
+    {
+      "id": 1,
+      "title": "Imóvel código 1, com 3 quartos e 2 banheiros.",
+      "price": 643000,
+      "description": "Imóvel em Scavy",
+      "lat": 200,
+      "long": 200,
+      "beds": 3,
+      "baths": 2,
+      "squareMeters": 61
+    },
+    {
+      "id": 2,
+      "title": "Imóvel código 2, com 4 quartos e 3 banheiros.",
+      "price": 949000,
+      "description": "Imóvel em Gode",
+      "lat": 200,
+      "long": 700,
+      "beds": 4,
+      "baths": 3,
+      "squareMeters": 94
+    },
+    {
+      "id": 3,
+      "title": "Imóvel código 3, com 5 quartos e 4 banheiros.",
+      "price": 1779000,
+      "description": "Imóvel em Groola",
+      "lat": 200,
+      "long": 800,
+      "beds": 5,
+      "baths": 4,
+      "squareMeters": 174
+    },
+    {
+      "id": 4,
+      "title": "Imóvel código 4, com 5 quartos e 4 banheiros.",
+      "price": 1684000,
+      "description": "Imóvel em Ruja",
+      "lat": 800,
+      "long": 800,
+      "beds": 5,
+      "baths": 4,
+      "squareMeters": 166
+    },
+    {
+      "id": 5,
+      "title": "Imóvel código 5, com 2 quartos e 1 banheiros.",
+      "price": 560000,
+      "description": "Imóvel em Nova",
+      "lat": 1200,
+      "long": 200,
+      "beds": 2,
+      "baths": 1,
+      "squareMeters": 54
+    },
+    {
+      "id": 6,
+      "title": "Imóvel código 6, com 5 quartos e 4 banheiros.",
+      "price": 1673000,
+      "description": "Imóvel em  Jaby",
+      "lat": 1200,
+      "long": 800,
+      "beds": 5,
+      "baths": 4,
+      "squareMeters": 167
+    },
+    {
+      "id": 7,
+      "title": "Imóvel código 7, com 5 quartos e 4 banheiros.",
+      "price": 1354000,
+      "description": "Imóvel em Gode e Ruja",
+      "lat": 500,
+      "long": 800,
+      "beds": 5,
+      "baths": 4,
+      "squareMeters": 131
+    },
+    {
+      "id": 8,
+      "title": "Imóvel Inválido",
+      "price": 0,
+      "description": "Imóvel Inválido",
+      "lat": 10,
+      "long": 1401,
+      "beds": 0,
+      "baths": 0,
+      "squareMeters": 0
+    }
+  ]
+}

@@ -11,3 +11,7 @@ server:
 spring:
   application:
     name: spotippos-api
+
+files:
+  provinces: provinces.json
+  properties: properties.json
