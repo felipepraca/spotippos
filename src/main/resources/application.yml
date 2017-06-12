@@ -1,0 +1,13 @@
+info:
+  component: 'Spotippos API'
+  build:
+    version: '@project.version@'
+    name: '@project.name@'
+
+server:
+  port: 8080
+
+#Spring
+spring:
+  application:
+    name: spotippos-api
