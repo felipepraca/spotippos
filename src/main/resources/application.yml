@@ -15,3 +15,14 @@ spring:
 files:
   provinces: provinces.json
   properties: properties.json
+
+validation:
+  beds:
+    max: 5
+    min: 1
+  baths:
+    max: 4
+    min: 1
+  squareMeters:
+    max: 240
+    min: 20
