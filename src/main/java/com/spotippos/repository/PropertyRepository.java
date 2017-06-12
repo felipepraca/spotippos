@@ -1,11 +1,14 @@
 package com.spotippos.repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.spotippos.model.Boundaries;
 import com.spotippos.model.Point;
 import com.spotippos.model.Property;
 
@@ -63,6 +66,27 @@ public class PropertyRepository {
      */
     public Property findBy(int id) {
         return properties.get(id);
+    }
+
+    /**
+     * Busca propriedades por area.
+     * 
+     * @param boundaries (area quadratica)
+     * @return
+     */
+    public List<Property> findBy(Boundaries boundaries) {
+        return propertiesInPoint.entrySet().stream().filter(entry -> {
+
+            Point point = entry.getKey();
+
+            Point upperLeft = boundaries.getUpperLeft();
+            Point bottomRight = boundaries.getBottomRight();
+
+            return (point.getX() >= upperLeft.getX() && point.getX() <= bottomRight.getX()) && (point.getY() >= bottomRight.getY() && point.getY() <= upperLeft.getY());
+
+        }).map(entry -> entry.getValue())
+          .sorted((p1, p2) -> p1.getId().compareTo(p2.getId()))
+          .collect(Collectors.toList());
     }
 
 }

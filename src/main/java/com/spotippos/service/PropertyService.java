@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 import com.spotippos.exception.IllegalLocationException;
 import com.spotippos.exception.InvalidPropertyException;
 import com.spotippos.exception.PropertyNotFound;
+import com.spotippos.model.Boundaries;
 import com.spotippos.model.Point;
+import com.spotippos.model.Properties;
 import com.spotippos.model.Property;
 import com.spotippos.repository.PropertyRepository;
 import com.spotippos.validator.PropertyValidator;
@@ -77,9 +79,10 @@ public class PropertyService {
     }
 
     /**
-     * 
+     * Busca propriedade por id.
      * 
      * @param id
+     *            (Id da propriedade)
      * @return
      * @throws PropertyNotFound
      */
@@ -92,6 +95,25 @@ public class PropertyService {
         }
 
         return property;
+    }
+
+    /**
+     * Busca propriedades por area
+     * 
+     * @param boundaries
+     *            (area quadratica)
+     * @return
+     * @throws PropertyNotFound
+     */
+    public Properties findBy(Boundaries boundaries) throws PropertyNotFound {
+
+        List<Property> finded = propertyRepository.findBy(boundaries);
+
+        if (finded.isEmpty()) {
+            throw new PropertyNotFound(String.format("Nenhuma propriedade encontrada na área. %s", boundaries.toString()));
+        }
+
+        return new Properties(finded);
     }
 
 }

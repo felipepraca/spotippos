@@ -2,6 +2,7 @@ package com.spotippos.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -24,7 +25,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.spotippos.exception.IllegalLocationException;
 import com.spotippos.exception.InvalidPropertyException;
 import com.spotippos.exception.PropertyNotFound;
+import com.spotippos.model.Boundaries;
 import com.spotippos.model.Point;
+import com.spotippos.model.Properties;
 import com.spotippos.model.Property;
 import com.spotippos.repository.PropertyRepository;
 import com.spotippos.validator.BedsValidator;
@@ -159,6 +162,40 @@ public class PropertyServiceTest {
 
         // WHEN
         service.findBy(100);
+
+        // THEN
+        fail();
+    }
+
+    @Test
+    public void encontraPropriedadesPorArea() throws PropertyNotFound {
+        // GIVEN
+        Property property1 = new Property();
+        Property property2 = new Property();
+
+        when(propertyRepository.findBy(any(Boundaries.class))).thenReturn(Arrays.asList(property1, property2));
+
+        // WHEN
+        Properties properties = service.findBy(new Boundaries());
+
+        // THEN
+        assertEquals(2, properties.getTotalProperties());
+        assertEquals(property1, properties.getProperties().get(0));
+        assertEquals(property2, properties.getProperties().get(1));
+    }
+
+    @Test(expected = PropertyNotFound.class)
+    public void lancaExcecaoSeNaoEncontrarPropriedadeNaArea() throws PropertyNotFound {
+        // GIVEN
+        when(propertyRepository.findBy(any(Boundaries.class))).thenReturn(new ArrayList<>());
+
+        Point a = new Point(20, 30);
+        Point b = new Point(10, 60);
+
+        Boundaries boundaries = new Boundaries(a, b);
+
+        // WHEN
+        service.findBy(boundaries);
 
         // THEN
         fail();

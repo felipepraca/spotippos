@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -28,6 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.spotippos.SpotipposApiBoot;
 import com.spotippos.exception.PropertyNotFound;
+import com.spotippos.model.Boundaries;
+import com.spotippos.model.Properties;
 import com.spotippos.model.Property;
 import com.spotippos.service.PropertyService;
 
@@ -121,6 +124,68 @@ public class PropertiesControllerTest {
         doThrow(PropertyNotFound.class).when(service).findBy(10);
 
         MockHttpServletRequestBuilder call = MockMvcRequestBuilders.get("/properties/10");
+
+        mockMvc.perform(call).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void consultaPropriedadePorArea() throws Exception {
+        Property property = new Property();
+
+        property.setId(10);
+        property.setBaths(3);
+        property.setBeds(4);
+        property.setDescription("descricao");
+        property.setPrice(140000.0);
+        property.setProvinces(Arrays.asList("A", "B"));
+        property.setSquareMeters(180);
+        property.setTitle("titulo");
+        property.setX(900);
+        property.setY(1000);
+
+        List<Property> propertiesList = Arrays.asList(property, property);
+
+        Properties properties = new Properties(propertiesList);
+
+        when(service.findBy(any(Boundaries.class))).thenReturn(properties);
+
+        MockHttpServletRequestBuilder call = MockMvcRequestBuilders.get("/properties")
+                                                                   .param("ax", "10")
+                                                                   .param("ay", "50")
+                                                                   .param("bx", "30")
+                                                                   .param("by", "10");
+
+        mockMvc.perform(call).andExpect(MockMvcResultMatchers.status().isOk())
+                            .andExpect(MockMvcResultMatchers.content().encoding("UTF-8"))
+                            .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.totalProperties", Matchers.is(2)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties", Matchers.hasSize(2)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].id", Matchers.is(10)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].baths", Matchers.is(3)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].beds", Matchers.is(4)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].description", Matchers.is("descricao")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].price", Matchers.is(140000.0)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].provinces", Matchers.hasSize(2)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].provinces[0]", Matchers.is("A")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].provinces[1]", Matchers.is("B")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].squareMeters", Matchers.is(180)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].title", Matchers.is("titulo")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].x", Matchers.is(900)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.properties[0].y", Matchers.is(1000)));
+
+    }
+
+    @Test
+    public void erroAoConsultaPropriedadePorArea() throws Exception {
+
+        doThrow(PropertyNotFound.class).when(service).findBy(any(Boundaries.class));
+
+        MockHttpServletRequestBuilder call = MockMvcRequestBuilders.get("/properties")
+                .param("ax", "10")
+                .param("ay", "50")
+                .param("bx", "30")
+                .param("by", "10");
+
 
         mockMvc.perform(call).andExpect(MockMvcResultMatchers.status().isNotFound());
     }

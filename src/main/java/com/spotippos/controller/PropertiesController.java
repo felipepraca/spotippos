@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spotippos.exception.InvalidPropertyException;
 import com.spotippos.exception.PropertyNotFound;
+import com.spotippos.model.Boundaries;
+import com.spotippos.model.Point;
+import com.spotippos.model.Properties;
 import com.spotippos.model.Property;
 import com.spotippos.service.PropertyService;
 
@@ -70,10 +74,41 @@ public class PropertiesController {
      * @return
      * @throws PropertyNotFound
      */
-    @ApiOperation(value = "Busca por id", notes = "Busca propriedades pelo seu id")
+    @ApiOperation(value = "Busca propriedade por id", notes = "Busca propriedade pelo seu id")
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public Property get(@ApiParam(value = "ID da propriedade") @PathVariable("id") int id, HttpServletResponse response) throws PropertyNotFound {
         return service.findBy(id);
+    }
+
+    /**
+     * Consulta propriedades por area.
+     * 
+     * @param ax
+     *            (posição x do ponto superior esquerdo)
+     * @param ay
+     *            (posição y do ponto superior esquerdo)
+     * @param bx
+     *            (posição x do ponto inferior esquerdo)
+     * @param by
+     *            (posição y do ponto inferior esquerdo)
+     * @return
+     * @throws PropertyNotFound
+     */
+    @ApiOperation(value = "Busca propriedades por area", notes = "Busca propriedades dentro de uma determinada area")
+    @RequestMapping(method = RequestMethod.GET)
+    public Properties get(@ApiParam(required = true, value = "Posição X do ponto superior esquerdo") @RequestParam(required = true, value = "ax") int ax,
+                        @ApiParam(required = true, value = "Posição Y do ponto superior esquerdo") @RequestParam(required = true, value = "ay") int ay,
+                        @ApiParam(required = true, value = "Posição X do ponto inferior direito") @RequestParam(required = true, value = "bx") int bx,
+                        @ApiParam(required = true, value = "Posição Y do ponto inferior direito") @RequestParam(required = true, value = "by") int by) 
+                      throws PropertyNotFound {
+
+        Point a = new Point(ax, ay);
+        Point b = new Point(bx, by);
+
+        // cria area para realizar a busca.
+        Boundaries boundaries = new Boundaries(a, b);
+
+        return service.findBy(boundaries);
     }
 
 }
