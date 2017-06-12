@@ -18,6 +18,7 @@ import com.spotippos.model.Property;
 @Component
 public class PropertyRepository {
 
+    private Map<Integer, Property> properties = new HashMap<>();
     private Map<Point, Property> propertiesInPoint = new HashMap<>();
 
     /**
@@ -33,7 +34,10 @@ public class PropertyRepository {
         int id = Objects.nonNull(property.getId()) ? property.getId() : propertiesInPoint.size() + 1;
         property.setId(id);
 
-        // adiciona no mapo por localização.
+        // adiciona no mapa por id.
+        properties.put(id, property);
+
+        // adiciona no mapa por localização.
         propertiesInPoint.put(new Point(property.getX(), property.getY()), property);
 
         return id;
@@ -48,6 +52,17 @@ public class PropertyRepository {
      */
     public Property findBy(Point point) {
         return propertiesInPoint.get(point);
+    }
+
+    /**
+     * Busca propriedade por id.
+     * 
+     * @param id
+     *            (Id da propriedade a ser buscada)
+     * @return
+     */
+    public Property findBy(int id) {
+        return properties.get(id);
     }
 
 }

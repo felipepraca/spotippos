@@ -56,4 +56,18 @@ public class PropertyRepositoryTest {
         assertEquals(1000, property.getY().intValue());
     }
 
+    @Test
+    public void procuraPropriedadePorId() {
+        // GIVEN
+        salvaPropriedadeSemId();
+
+        // WHEN
+        Property property = repository.findBy(1);
+
+        // THEN
+        assertEquals(1, property.getId().intValue());
+        assertEquals(1000, property.getX().intValue());
+        assertEquals(1000, property.getY().intValue());
+    }
+
 }

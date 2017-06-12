@@ -1,8 +1,12 @@
 package com.spotippos.controller;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +20,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.spotippos.SpotipposApiBoot;
+import com.spotippos.exception.PropertyNotFound;
 import com.spotippos.model.Property;
 import com.spotippos.service.PropertyService;
 
@@ -60,7 +66,7 @@ public class PropertiesControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.header().string("Location", "/properties/10"));
     }
-    
+
     @Test
     public void erroPropriedadeSemTitulo() throws Exception {
 
@@ -70,7 +76,53 @@ public class PropertiesControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{ \"x\": 222, \"y\": 444, \"price\": 1250000, \"description\": \"descricao\", \"beds\": 4, \"baths\": 3, \"squareMeters\": 210 }"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
-        
+    }
+
+    @Test
+    public void consultaPropriedadePorId() throws Exception {
+        Property property = new Property();
+
+        property.setId(10);
+        property.setBaths(3);
+        property.setBeds(4);
+        property.setDescription("descricao");
+        property.setPrice(140000.0);
+        property.setProvinces(Arrays.asList("A", "B"));
+        property.setSquareMeters(180);
+        property.setTitle("titulo");
+        property.setX(900);
+        property.setY(1000);
+
+        when(service.findBy(10)).thenReturn(property);
+
+        MockHttpServletRequestBuilder call = MockMvcRequestBuilders.get("/properties/10");
+
+        mockMvc.perform(call).andExpect(MockMvcResultMatchers.status().isOk())
+                            .andExpect(MockMvcResultMatchers.content().encoding("UTF-8"))
+                            .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(10)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.baths", Matchers.is(3)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.beds", Matchers.is(4)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is("descricao")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(140000.0)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.provinces", Matchers.hasSize(2)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.provinces[0]", Matchers.is("A")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.provinces[1]", Matchers.is("B")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.squareMeters", Matchers.is(180)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.title", Matchers.is("titulo")))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.x", Matchers.is(900)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.y", Matchers.is(1000)));
+
+    }
+
+    @Test
+    public void erroAoConsultaPropriedadePorId() throws Exception {
+
+        doThrow(PropertyNotFound.class).when(service).findBy(10);
+
+        MockHttpServletRequestBuilder call = MockMvcRequestBuilders.get("/properties/10");
+
+        mockMvc.perform(call).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 }

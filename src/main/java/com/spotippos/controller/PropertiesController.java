@@ -7,17 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spotippos.exception.InvalidPropertyException;
+import com.spotippos.exception.PropertyNotFound;
 import com.spotippos.model.Property;
 import com.spotippos.service.PropertyService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * Controller de propriedades
@@ -57,6 +60,20 @@ public class PropertiesController {
 
         response.addHeader("Location", "/properties/" + id);
         response.setStatus(HttpStatus.CREATED.value());
+    }
+
+    /**
+     * Consulta propriedade por id,
+     * 
+     * @param id
+     *            (Id da propriedade)
+     * @return
+     * @throws PropertyNotFound
+     */
+    @ApiOperation(value = "Busca por id", notes = "Busca propriedades pelo seu id")
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public Property get(@ApiParam(value = "ID da propriedade") @PathVariable("id") int id, HttpServletResponse response) throws PropertyNotFound {
+        return service.findBy(id);
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.spotippos.exception.IllegalLocationException;
 import com.spotippos.exception.InvalidPropertyException;
+import com.spotippos.exception.PropertyNotFound;
 import com.spotippos.model.Point;
 import com.spotippos.model.Property;
 import com.spotippos.repository.PropertyRepository;
@@ -73,6 +74,24 @@ public class PropertyService {
         for (PropertyValidator validator : validators) {
             validator.validate(property);
         }
+    }
+
+    /**
+     * 
+     * 
+     * @param id
+     * @return
+     * @throws PropertyNotFound
+     */
+    public Property findBy(int id) throws PropertyNotFound {
+
+        Property property = propertyRepository.findBy(id);
+
+        if (Objects.isNull(property)) {
+            throw new PropertyNotFound(String.format("Nenhuma propriedade encontrada com o id %d", id));
+        }
+
+        return property;
     }
 
 }

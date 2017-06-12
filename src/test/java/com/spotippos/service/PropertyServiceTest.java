@@ -23,6 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.spotippos.exception.IllegalLocationException;
 import com.spotippos.exception.InvalidPropertyException;
+import com.spotippos.exception.PropertyNotFound;
 import com.spotippos.model.Point;
 import com.spotippos.model.Property;
 import com.spotippos.repository.PropertyRepository;
@@ -135,6 +136,32 @@ public class PropertyServiceTest {
         // THEN
         fail();
 
+    }
+
+    @Test
+    public void encontraPropriedadePorId() throws PropertyNotFound {
+        // GIVEN
+        Property property = new Property();
+
+        when(propertyRepository.findBy(100)).thenReturn(property);
+
+        // WHEN
+        Property propertyFinded = service.findBy(100);
+
+        // THEN
+        assertEquals(property, propertyFinded);
+    }
+
+    @Test(expected = PropertyNotFound.class)
+    public void naoEncontraPropriedadePorId() throws PropertyNotFound {
+        // GIVEN
+        when(propertyRepository.findBy(100)).thenReturn(null);
+
+        // WHEN
+        service.findBy(100);
+
+        // THEN
+        fail();
     }
 
 }
