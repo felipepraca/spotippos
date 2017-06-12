@@ -2,21 +2,44 @@ package com.spotippos.model;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Property {
 
     private Integer id;
+
+    @NotNull(message = "É necessário informar o título da propriedade.")
+    @NotBlank(message = "É necessário informar a título da propriedade.")
     private String title;
+
+    @NotNull(message = "É necessário informar o preço da propriedade.")
     private Double price;
+
+    @NotNull(message = "É necessário informar a descrição da propriedade.")
+    @NotBlank(message = "É necessário informar a descrição da propriedade.")
     private String description;
+
+    @NotNull(message = "É necessário informar a posição X da propriedade.")
     @SerializedName("lat")
     private Integer x;
+
+    @NotNull(message = "É necessário informar a posição Y da propriedade.")
     @SerializedName("long")
     private Integer y;
+
+    @NotNull(message = "É necessário informar a quantidade de quartos da propriedade.")
     private Integer beds;
+
+    @NotNull(message = "É necessário informar a quantidade de banheiros da propriedade.")
     private Integer baths;
+
+    @NotNull(message = "É necessário informar a quantidade de metros quadrados da propriedade.")
     private Integer squareMeters;
+
     private List<String> provinces;
 
     public Integer getId() {
