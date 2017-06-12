@@ -6,6 +6,12 @@ import org.springframework.stereotype.Component;
 import com.spotippos.exception.InvalidPropertyException;
 import com.spotippos.model.Property;
 
+/**
+ * Validador dos limites de quartos de uma propriedade.
+ * 
+ * @author Felipe
+ *
+ */
 @Component
 public class BedsValidator implements PropertyValidator {
 

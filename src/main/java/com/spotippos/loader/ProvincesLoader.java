@@ -10,6 +10,12 @@ import org.springframework.context.annotation.Configuration;
 import com.spotippos.model.Province;
 import com.spotippos.model.Provinces;
 
+/**
+ * Classe que carrega arquivo json de provincias.
+ * 
+ * @author Felipe
+ *
+ */
 @Configuration
 public class ProvincesLoader {
 
@@ -30,6 +36,7 @@ public class ProvincesLoader {
         provinces.getRuja().setName(Provinces.RUJA);
         provinces.getScavy().setName(Provinces.SCAVY);
 
+        // cria lista pra facilitar manipulação dos dados.
         return Arrays.asList(provinces.getGode(),
                             provinces.getGroola(),
                             provinces.getJaby(),

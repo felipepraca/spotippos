@@ -51,7 +51,7 @@ public class ProvinceServiceTest {
     }
 
     @Test(expected = IllegalLocationException.class)
-    public void teste() throws IllegalLocationException {
+    public void erroAoRecuperarNameDaProvinciaPorPosicaoForaDoLimite() throws IllegalLocationException {
         // GIVEN
         Point point = new Point(30, 10);
 

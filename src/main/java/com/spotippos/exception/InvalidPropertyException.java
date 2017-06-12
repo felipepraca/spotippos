@@ -2,6 +2,12 @@ package com.spotippos.exception;
 
 import org.springframework.validation.BindingResult;
 
+/**
+ * Exceção de dados inválidos da propriedade.
+ * 
+ * @author Felipe
+ *
+ */
 public class InvalidPropertyException extends Exception {
 
     private static final long serialVersionUID = -4139598879719627471L;
